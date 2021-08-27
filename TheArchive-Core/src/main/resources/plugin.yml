@@ -1,0 +1,218 @@
+name: TheArchive-Core
+main: anthony.SuperCraftBrawl.Main
+version: 1.0
+commands:
+   join:
+      description: Join a game
+      usage: /join [map name]
+   players:
+      description: List of players in your game
+   list:
+      description: List of online players
+   leave:
+      description: Leave the game you are currently in
+   hub:
+      description: Teleport to Hub
+   spawn:
+      description: Hi
+   survival:
+      description: Hello
+   joinfrenzy:
+      description: Join
+   duel:
+      description: Duel
+   tournamentmodetoggle:
+      description: Toggle Tournament
+   classcactusclass:
+      description: Cactus Class
+   server:
+      description: Server command
+   class:
+      description: Class command
+   startgame:
+      description: Start game
+   kill:
+      description: Kill
+   store:
+      description: Store command
+   nick:
+      description: Nickname!
+   tell:
+      description: Msg command!
+   setrank:
+      description: Rank command!
+      permission: scb.setrank
+   setlives:
+      description: Set lives command!
+   online:
+      description: Online players command!
+   purchases:
+      description: Purchases command!
+      
+   melonwars:
+      description: Test command!
+   testscblobby:
+      description: Test command!
+   maps:
+      description: Maps command!
+   melons:
+      description: Test command!
+   seen:
+      description: Seen command
+   ignite:
+      description: Ignite a player!
+   broadcast:
+      description: Broadcast command
+   msg:
+      description: Message command
+   rank:
+      description: Ranks command
+   spectate:
+      description: Spectate command
+   testing:
+      description: Test Command
+   send:
+      description: Send command
+   tester:
+      description: QuitGUI
+   maplist:
+      description: Displays list of SCB Maps
+   discord:
+      description: Discord
+   vanish:
+      description: Vanish
+   unvanish:
+      description: Unvanish
+   gmc:
+      description: Gamemode creative
+   gms: 
+      description: Gamemode survival
+   gma:
+      description: Gamemode adventure
+   gmsp:
+      description: Gamemode spectator
+   gm:
+      description: General gamemode command
+   scbhelp:
+      description: Displays SCB help/information
+   dailyreward:
+      description: Daily Rewards
+   tutorial:
+      description: Tutorial of the Server
+   scb:
+      description: Displays SCB help/information
+   classes:
+      description: Displays list of SCB Classes
+   pvp:
+      description: PvP
+   stats:
+      description: Player Stats
+   token:
+      description: Give tokens
+   plugins:
+      description: Plugin list
+   cwm:
+      description: Custom Win Messages!
+   setchests:
+      description: Test command
+   activegames:
+      description: Test command
+   help:
+      description: HelpppppPPPppp!!!
+   sc:
+      description: Staff Chat
+   staff:
+      description: Staff command!
+   rules:
+      description: Displays the Server Rules
+   pay:
+      description: Pay someone
+   reward:
+      description: Idk anymore lollll
+   parkour:
+      description: Parkour
+   test:
+      description: Test command
+   invite:
+      description: Invite command
+   color:
+      description: Color command
+   tp:
+      description: Teleport command
+   punish:
+      description: Punishment command
+   exp:
+      description: Exp command
+   smmtest:
+      description: SMM
+   sh:
+      description: Staff help command
+   shr:
+      description: Staff help reply command
+   points:
+      description: Points command
+      
+permissions:
+   scb.admin:
+      description: Admin perms
+      children:
+         scb.developer: true
+         scb.startGame: true
+         scb.setLives: true
+         scb.setrank: true
+         scb.giveTokens: true
+         scb.broadcast: true
+         scb.ignite: true
+   scb.developer:
+      description: Developer perms
+      children:
+         scb.moderator: true
+         scb.gm: true
+         scb.gmc: true
+         scb.gms: true
+         scb.gmsp: true
+         scb.gma: true
+   scb.moderator:
+      description: Moderator perms
+      children:
+         scb.trainee: true
+   scb.trainee:
+      description: Trainee perms
+      children:
+         scb.captain: true
+         scb.vanish: true
+         scb.unvanish: true
+         scb.staffchat: true
+         scb.staff: true
+         scb.tp: true
+         scb.staffhelp: true
+         scb.staffhelpreply: true
+         scb.anticheat: true
+   scb.design:
+      description: Design perms
+      children:
+         scb.captain: true
+   scb.captain:
+      description: Captain perms
+      children:
+         scb.vip: true
+         scb.customWin: true
+         scb.wheat: true
+         scb.invite: true
+         scb.color: true
+         scb.bypassQueue: true
+   scb.vip:
+      description: Vip perms
+      children:
+         scb.default: true
+         scb.nickname.use: true
+         scb.bonusTokens: true
+         scb.rankBonusOne: true
+         scb.rankBonus: true
+         scb.cooldown: true
+         scb.chat: true
+   scb.default:
+      description: Default perms
+      children:
+         
+   
