@@ -82,15 +82,10 @@ public class BabyCowClass extends BaseClass {
 		Random rand = new Random();
 		int chance = rand.nextInt(9);
 
-		if (chance == 5) {
+		if (chance == 5 || chance == 1 || chance == 7 || chance == 6) {
 			if (event.getEntity() instanceof LivingEntity) {
 				((LivingEntity) event.getEntity())
-						.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 2, true));
-			}
-		} else if (chance == 3) {
-			if (event.getEntity() instanceof LivingEntity) {
-				((LivingEntity) event.getEntity())
-						.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 60, 2, true));
+						.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 150, 2, true));
 			}
 		}
 	}

@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 import anthony.SuperCraftBrawl.ItemHelper;
 import anthony.SuperCraftBrawl.Main;
+import anthony.SuperCraftBrawl.Game.GameInstance;
+import anthony.SuperCraftBrawl.Game.classes.BaseClass;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -26,6 +28,8 @@ public class CraftableItemsGUI implements InventoryProvider {
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
+		GameInstance instance = main.getGameManager().GetInstanceOfPlayer(player);
+		BaseClass bc = instance.classes.get(player);
 		ItemStack coal = new ItemStack(Material.COAL, 4);
 		ItemStack ironIngot = new ItemStack(Material.IRON_INGOT, 4);
 		ItemStack goldIngot = new ItemStack(Material.GOLD_INGOT, 4);
@@ -48,6 +52,7 @@ public class CraftableItemsGUI implements InventoryProvider {
 									player.sendMessage("Successfully crafted " + ChatColor.RESET + ChatColor.BLACK
 											+ ChatColor.BOLD + "Coal Block");
 									player.getInventory().remove(coal);
+									bc.coalAmt = 0;
 								} else {
 									player.sendMessage("Use your other coal first before crafting a new one!");
 								}
@@ -84,6 +89,7 @@ public class CraftableItemsGUI implements InventoryProvider {
 									player.sendMessage("Successfully crafted " + ChatColor.RESET + ChatColor.GOLD
 											+ ChatColor.BOLD + "Gold Block");
 									player.getInventory().remove(goldIngot);
+									bc.goldAmt = 0;
 								} else {
 									player.sendMessage("Use your other gold first before crafting a new one!");
 								}
@@ -102,6 +108,7 @@ public class CraftableItemsGUI implements InventoryProvider {
 									player.sendMessage("Successfully crafted " + ChatColor.RESET + ChatColor.AQUA
 											+ ChatColor.BOLD + "Diamond Block");
 									player.getInventory().remove(diamond);
+									bc.diaAmt = 0;
 								} else {
 									player.sendMessage("Use your other diamond first before crafting a new one!");
 								}

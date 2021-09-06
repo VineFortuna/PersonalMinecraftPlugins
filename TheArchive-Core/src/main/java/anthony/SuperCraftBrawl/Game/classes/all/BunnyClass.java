@@ -39,6 +39,7 @@ public class BunnyClass extends BaseClass {
 
 	@Override
 	public void SetArmour(EntityEquipment playerEquip) {
+		playerEquip.setHelmet(makeRed(new ItemStack(Material.LEATHER_HELMET)));
 		playerEquip.setChestplate(makeRed(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_CHESTPLATE),
 				Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
 		playerEquip.setLeggings(makeRed(new ItemStack(Material.LEATHER_LEGGINGS)));

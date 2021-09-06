@@ -52,10 +52,7 @@ public class HerobrineClass extends BaseClass {
 		playerskull.setItemMeta(meta);
 
 		playerEquip.setHelmet(playerskull);
-		playerEquip.setChestplate(ItemHelper.addEnchant(new ItemStack(Material.CHAINMAIL_CHESTPLATE),
-				Enchantment.PROTECTION_ENVIRONMENTAL, 4));
-		playerEquip.setBoots(ItemHelper.addEnchant(new ItemStack(Material.CHAINMAIL_BOOTS),
-				Enchantment.PROTECTION_ENVIRONMENTAL, 4));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 999999999, 1));
 	}
 
 	@Override
@@ -67,7 +64,6 @@ public class HerobrineClass extends BaseClass {
 						Enchantment.DURABILITY, 10000));
 		playerInv.setItem(1, ItemHelper.setDetails(new ItemStack(Material.DIAMOND),
 				"" + ChatColor.RESET + ChatColor.BOLD + "Diamond of Despair"));
-
 	}
 
 	@Override
@@ -80,24 +76,23 @@ public class HerobrineClass extends BaseClass {
 			int chance = rand.nextInt(3);
 
 			for (Player gamePlayer : instance.players) {
-				
+
 			}
 
 			if (chance == 0) {
-				for (Player gamePlayers : instance.players) {
-					gamePlayers.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
-					player.removePotionEffect(PotionEffectType.SLOW);
-				}
+				for (Player gamePlayers : instance.players)
+					if (gamePlayers != player)
+						gamePlayers.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 1));
 			} else if (chance == 1) {
-				for (Player gamePlayers : instance.players) {
-					gamePlayers.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 0));
-					player.removePotionEffect(PotionEffectType.POISON);
-				}
+				for (Player gamePlayers : instance.players)
+					if (gamePlayers != player)
+						gamePlayers.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 0));
 			} else if (chance == 2) {
 				for (Player gamePlayers : instance.players) {
-					gamePlayers.setFireTicks(100);
-					player.setFireTicks(0);
-					instance.getMapWorld().strikeLightningEffect(gamePlayers.getLocation());
+					if (gamePlayers != player) {
+						gamePlayers.setFireTicks(100);
+						instance.getMapWorld().strikeLightningEffect(gamePlayers.getLocation());
+					}
 				}
 			}
 			int amount = item.getAmount();

@@ -23,13 +23,13 @@ public enum Maps {
 			.setLobbyLoc(new Vector(-1259.480, 130, 1008.520)).setSpecLoc(new Vector(-1194.847, 137.13280, 1011.121))
 			.setBounds(new Vector(-1200.500, 142, 1003.500), 42, 50)),
 
-	NorthernSeas("NorthernSeas",
+	/*NorthernSeas("NorthernSeas",
 			new MapInstance("northernseas")
 					.setSpawnPos(new Vector(-1268.869, 165, 998.872), new Vector(-1273.602, 143, 984.472),
 							new Vector(-1257.214, 117, 959.390), new Vector(-1241.536, 119, 941.453),
 							new Vector(-1241.404, 158, 966.367), new Vector(-1222.527, 116, 962.654))
 					.setLobbyLoc(new Vector(-1239.519, 125, 890.484)).setSpecLoc(new Vector(-1241.538, 162, 969.491))
-					.setBounds(new Vector(-1241.500, 165, 979.500), 60, 60)),
+					.setBounds(new Vector(-1241.500, 165, 979.500), 60, 60)),*/
 
 	Candyland("Candyland",
 			new MapInstance("candylandclassic")
@@ -39,12 +39,12 @@ public enum Maps {
 					.setLobbyLoc(new Vector(-1259.504, 136, 960.513)).setSpecLoc(new Vector(-1264.500, 157, 1011.500))
 					.setBounds(new Vector(-1265.532, 160, 1010.443), 40, 32)),
 
-	EggHunt("EggHunt", new MapInstance("egghunt")
+	/*EggHunt("EggHunt", new MapInstance("egghunt")
 			.setSpawnPos(new Vector(-1224.297, 153, 972.793), new Vector(-1239.013, 161, 991.791),
 					new Vector(-1274.368, 147, 992.237), new Vector(-1276.799, 167, 962.813),
 					new Vector(-1215.393, 142, 945.668), new Vector(-1265.496, 142, 926.329))
 			.setLobbyLoc(new Vector(-1242.535, 151, 877.519)).setSpecLoc(new Vector(-1248.500, 168, 963.500))
-			.setBounds(new Vector(-1239.549, 162, 960.644), 67, 65)),
+			.setBounds(new Vector(-1239.549, 162, 960.644), 67, 65)),*/
 
 	JungleRiver("JungleRiver", new MapInstance("jungleriver")
 			.setSpawnPos(new Vector(-1286.582, 99, 963.440), new Vector(-1289.416, 111, 991.638),
@@ -189,7 +189,7 @@ public enum Maps {
 					new Vector(5065.438, 158, 624.535), new Vector(5038.497, 145, 635.504),
 					new Vector(5059.595, 145, 606.429), new Vector(5038.436, 138, 591.371))
 			.setLobbyLoc(new Vector(5000.505, 155, 597.490)).setSpecLoc(new Vector(5050.741, 155.40139, 606.475))
-			.setBounds(new Vector(5052.502, 160, 610.468), 30, 40)),
+			.setBounds(new Vector(5052.502, 160, 610.468), 30, 45)),
 
 	Clockwork("Clockwork", new MapInstance("clockwork")
 			.setSpawnPos(new Vector(5001.994, 174, 606.994), new Vector(5015.599, 158, 606.437),
@@ -246,6 +246,27 @@ public enum Maps {
 					new Vector(4935.409, 160, 739.443))
 			.setLobbyLoc(new Vector(4894.390, 158, 748.594)).setSpecLoc(new Vector(4951.397, 154, 738.449))
 			.setBounds(new Vector(4969.568, 183, 738.493), 50, 70)),
+	
+	Mountain("Mountain", new MapInstance("mountain")
+			.setSpawnPos(new Vector(4885.463, 152, 790.549), new Vector(4864.387, 152, 790.485),
+					new Vector(4867.388, 168, 781.455), new Vector(4904.560, 187, 788.443),
+					new Vector(4874.485, 160, 800.518))
+			.setLobbyLoc(new Vector(4819.523, 186, 788.498)).setSpecLoc(new Vector(4885.436, 158, 790.454))
+			.setBounds(new Vector(4885.436, 158, 790.454), 45, 40)),
+	
+	Mansion("Mansion", new MapInstance("mansion")
+			.setSpawnPos(new Vector(4920.444, 152, 776.414), new Vector(4953.547, 152, 793.375),
+					new Vector(4954.586, 145, 838.512), new Vector(4925.501, 149, 815.555),
+					new Vector(4911.503, 157, 814.491))
+			.setLobbyLoc(new Vector(4933.467, 151, 719.522)).setSpecLoc(new Vector(4922.493, 149, 812.282))
+			.setBounds(new Vector(4932.483, 188, 811.481), 50, 60)),
+	
+	TempleOfMars("TempleOfMars", new MapInstance("templeofmars")
+			.setSpawnPos(new Vector(4962.489, 155, 742.402), new Vector(4946.502, 153, 788.490),
+					new Vector(4918.471, 149, 768.472), new Vector(4888.509, 148, 779.695),
+					new Vector(4888.461, 158, 782.541))
+			.setLobbyLoc(new Vector(4930.449, 163, 690.517)).setSpecLoc(new Vector(4930.428, 160, 772.552))
+			.setBounds(new Vector(4930.428, 160, 772.552), 60, 40)),
 	
 	
 	YingYang("YingYang", new MapInstance("yingyang")

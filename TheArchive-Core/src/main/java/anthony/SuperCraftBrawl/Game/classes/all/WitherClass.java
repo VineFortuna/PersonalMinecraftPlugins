@@ -2,6 +2,7 @@ package anthony.SuperCraftBrawl.Game.classes.all;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -33,20 +34,21 @@ public class WitherClass extends BaseClass {
 		return ClassType.Wither;
 	}
 
-	public ItemStack makeBlack(ItemStack armor) {
+	public ItemStack makeGray(ItemStack armor) {
 		LeatherArmorMeta lm = (LeatherArmorMeta) armor.getItemMeta();
-		lm.setColor(Color.ORANGE);
+		lm.setColor(Color.GRAY);
 		armor.setItemMeta(lm);
 		return armor;
 	}
 
 	@Override
 	public void SetArmour(EntityEquipment playerEquip) {
-		playerEquip.setHelmet(makeBlack(new ItemStack(Material.LEATHER_HELMET)));
-		playerEquip.setChestplate(makeBlack(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_CHESTPLATE),
+		ItemStack witherHelmet = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.WITHER.ordinal());
+		playerEquip.setHelmet(witherHelmet);
+		playerEquip.setChestplate(makeGray(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_CHESTPLATE),
 				Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
-		playerEquip.setLeggings(makeBlack(new ItemStack(Material.LEATHER_LEGGINGS)));
-		playerEquip.setBoots(makeBlack(
+		playerEquip.setLeggings(makeGray(new ItemStack(Material.LEATHER_LEGGINGS)));
+		playerEquip.setBoots(makeGray(
 				ItemHelper.addEnchant(new ItemStack(Material.LEATHER_BOOTS), Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
 	}
 
@@ -59,7 +61,7 @@ public class WitherClass extends BaseClass {
 	public void SetItems(Inventory playerInv) {
 		playerInv.setItem(0,
 				ItemHelper.addEnchant(
-						ItemHelper.addEnchant(new ItemStack(Material.NETHER_STAR), Enchantment.DAMAGE_ALL, 1),
+						ItemHelper.addEnchant(new ItemStack(Material.NETHER_STAR), Enchantment.DAMAGE_ALL, 2),
 						Enchantment.KNOCKBACK, 1));
 		playerInv.setItem(1,
 				ItemHelper.addEnchant(ItemHelper.addEnchant(new ItemStack(Material.BOW), Enchantment.DURABILITY, 1000),

@@ -25,7 +25,10 @@ import anthony.SuperCraftBrawl.Game.classes.Cooldown;
 
 public class SteveClass extends BaseClass {
 	
-	private ItemStack woodPick = ItemHelper.addEnchant(new ItemStack(Material.WOOD_PICKAXE), Enchantment.DURABILITY, 10000);
+	private ItemStack stonePick = ItemHelper.addEnchant(new ItemStack(Material.STONE_PICKAXE), Enchantment.DURABILITY, 10000);
+	private ItemStack gold = new ItemStack(Material.GOLD_INGOT, goldAmt);
+	private ItemStack coal = new ItemStack(Material.COAL, coalAmt);
+	private ItemStack diamond = new ItemStack(Material.DIAMOND, diaAmt);
 	private boolean kb1 = false;
 	private boolean kb2 = false;
 	private int kb = 1;
@@ -59,109 +62,51 @@ public class SteveClass extends BaseClass {
 
 	@Override
 	public void SetItems(Inventory playerInv) {
-		playerInv.setItem(0, woodPick);
+		playerInv.setItem(0, stonePick);
 		playerInv.setItem(1, new ItemStack(Material.WORKBENCH));
+		
+		if (goldAmt > 0)
+			playerInv.setItem(2, new ItemStack(Material.GOLD_INGOT, goldAmt));
+		if (coalAmt > 0)
+			playerInv.setItem(3, new ItemStack(Material.COAL, coalAmt));
+		if (diaAmt > 0)
+			playerInv.setItem(4, new ItemStack(Material.DIAMOND, diaAmt));
 	}
 
 	@Override
 	public void DoDamage(EntityDamageByEntityEvent event) {
 		if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
 			Player attacker = (Player) event.getDamager();
-			if (attacker.getInventory().getItemInHand().getType() == Material.WOOD_PICKAXE) {
-				Player victim = (Player) event.getEntity();
+			if (attacker.getInventory().getItemInHand().getType() == Material.STONE_PICKAXE) {
 				Random rand = new Random();
-				int chance = rand.nextInt(100);
-				if (fortune == 0) {
-					if (chance >= 0 && chance <= 19) {
-						if (!(attacker.getInventory().contains(new ItemStack(Material.COAL, 4))))
+				int chance = rand.nextInt(3);
+					if (chance == 0) {
+						if (!(attacker.getInventory().contains(new ItemStack(Material.COAL, 4)))) {
 							attacker.getInventory().addItem(new ItemStack(Material.COAL));
+							coalAmt++;
+						}
 						else
 							attacker.sendMessage("Reached maximum number of coal");
-					} else if (chance >= 20 && chance <= 34)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.IRON_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of iron");
-					else if (chance >= 35 && chance <= 49)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.GOLD_INGOT, 4))))
+					} else if (chance == 1)
+						if (!(attacker.getInventory().contains(new ItemStack(Material.GOLD_INGOT, 4)))) {
 							attacker.getInventory().addItem(new ItemStack(Material.GOLD_INGOT));
+							goldAmt++;
+						}
 						else
 							attacker.sendMessage("Reached maximum number of gold");
-					else if (chance >= 50 && chance <= 64)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.DIAMOND, 4))))
+					else if (chance == 2)
+						if (!(attacker.getInventory().contains(new ItemStack(Material.DIAMOND, 4)))) {
 							attacker.getInventory().addItem(new ItemStack(Material.DIAMOND));
+							diaAmt++;
+						}
 						else
 							attacker.sendMessage("Reached maximum number of diamond");
-				} else if (fortune == 1) {
-					if (chance >= 0 && chance <= 19) {
-						if (!(attacker.getInventory().contains(new ItemStack(Material.COAL, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.COAL));
-						else
-							attacker.sendMessage("Reached maximum number of coal");
-					} else if (chance >= 20 && chance <= 39)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.IRON_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of iron");
-					else if (chance >= 40 && chance <= 59)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.GOLD_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.GOLD_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of gold");
-					else if (chance >= 60 && chance <= 79)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.DIAMOND, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.DIAMOND));
-						else
-							attacker.sendMessage("Reached maximum number of diamond");
-				} else if (fortune == 2) {
-					if (chance >= 0 && chance <= 24) {
-						if (!(attacker.getInventory().contains(new ItemStack(Material.COAL, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.COAL));
-						else
-							attacker.sendMessage("Reached maximum number of coal");
-					} else if (chance >= 25 && chance <= 44)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.IRON_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of iron");
-					else if (chance >= 45 && chance <= 67)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.GOLD_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.GOLD_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of gold");
-					else if (chance >= 68 && chance <= 90)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.DIAMOND, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.DIAMOND));
-						else
-							attacker.sendMessage("Reached maximum number of diamond");
-				} else if (fortune == 3) {
-					if (chance >= 0 && chance <= 24) {
-						if (!(attacker.getInventory().contains(new ItemStack(Material.COAL, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.COAL));
-						else
-							attacker.sendMessage("Reached maximum number of coal");
-					} else if (chance >= 20 && chance <= 44)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.IRON_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.IRON_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of iron");
-					else if (chance >= 45 && chance <= 69)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.GOLD_INGOT, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.GOLD_INGOT));
-						else
-							attacker.sendMessage("Reached maximum number of gold");
-					else if (chance >= 70 && chance <= 99)
-						if (!(attacker.getInventory().contains(new ItemStack(Material.DIAMOND, 4))))
-							attacker.getInventory().addItem(new ItemStack(Material.DIAMOND));
-						else
-							attacker.sendMessage("Reached maximum number of diamond");
-				}
 
 				if (instance.blindness == 1) {
 					Random rand1 = new Random();
 					int chance1 = rand1.nextInt(10);
 
-					if (chance1 == 1 || chance1 == 5) {
+					if (chance1 == 1 || chance1 == 5 || chance1 == 7) {
 						if (event.getEntity() instanceof LivingEntity) {
 							((LivingEntity) event.getEntity())
 									.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 0, true));
@@ -171,7 +116,7 @@ public class SteveClass extends BaseClass {
 					Random rand2 = new Random();
 					int chance2 = rand2.nextInt(10);
 
-					if (chance2 == 1 || chance2 == 5) {
+					if (chance2 == 1 || chance2 == 5 || chance2 == 2) {
 						if (event.getEntity() instanceof LivingEntity) {
 							((LivingEntity) event.getEntity())
 									.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 65, 1, true));
@@ -181,10 +126,10 @@ public class SteveClass extends BaseClass {
 					Random rand3 = new Random();
 					int chance3 = rand3.nextInt(10);
 
-					if (chance3 == 1 || chance3 == 5) {
+					if (chance3 == 1 || chance3 == 5 || chance3 == 7 || chance3 == 4) {
 						if (event.getEntity() instanceof LivingEntity) {
 							((LivingEntity) event.getEntity())
-									.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 75, 2, true));
+									.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 2, true));
 						}
 					}
 				}
@@ -202,14 +147,14 @@ public class SteveClass extends BaseClass {
 		} else if (item != null && item.getType() == Material.GOLD_BLOCK
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			if (kb == 1) {
-				ItemHelper.addEnchant(woodPick, Enchantment.KNOCKBACK, kb);
-				player.getInventory().setItem(0, woodPick);
+				ItemHelper.addEnchant(stonePick, Enchantment.KNOCKBACK, kb);
+				player.getInventory().setItem(0, stonePick);
 				player.getInventory().remove(new ItemStack(Material.GOLD_BLOCK));
 				player.sendMessage("Your pickaxe is now Knockback " + kb);
 				kb++;
 			} else if (kb == 2) {
-				ItemHelper.addEnchant(woodPick, Enchantment.KNOCKBACK, kb);
-				player.getInventory().setItem(0, woodPick);
+				ItemHelper.addEnchant(stonePick, Enchantment.KNOCKBACK, kb);
+				player.getInventory().setItem(0, stonePick);
 				player.getInventory().remove(new ItemStack(Material.GOLD_BLOCK));
 				player.sendMessage("Your pickaxe is now Knockback " + kb);
 				kb++;
@@ -219,27 +164,27 @@ public class SteveClass extends BaseClass {
 		} else if (item != null && item.getType() == Material.DIAMOND_BLOCK
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			if (sharp == 1) {
-				ItemHelper.addEnchant(woodPick, Enchantment.DAMAGE_ALL, sharp);
-				player.getInventory().setItem(0, woodPick);
+				ItemHelper.addEnchant(stonePick, Enchantment.DAMAGE_ALL, sharp);
+				player.getInventory().setItem(0, stonePick);
 				player.getInventory().remove(new ItemStack(Material.DIAMOND_BLOCK));
 				player.sendMessage("Your pickaxe is now Sharpness " + sharp);
 				sharp++;
 			} else if (sharp == 2) {
-				ItemHelper.addEnchant(woodPick, Enchantment.DAMAGE_ALL, sharp);
-				player.getInventory().setItem(0, woodPick);
+				ItemHelper.addEnchant(stonePick, Enchantment.DAMAGE_ALL, sharp);
+				player.getInventory().setItem(0, stonePick);
 				player.getInventory().remove(new ItemStack(Material.DIAMOND_BLOCK));
 				player.sendMessage("Your pickaxe is now Sharpness " + sharp);
 				sharp++;
-			} else if (sharp == 3) {
-				ItemHelper.addEnchant(woodPick, Enchantment.DAMAGE_ALL, sharp);
-				player.getInventory().setItem(0, woodPick);
+			} /*else if (sharp == 3) {
+				ItemHelper.addEnchant(stonePick, Enchantment.DAMAGE_ALL, sharp);
+				player.getInventory().setItem(0, stonePick);
 				player.getInventory().remove(new ItemStack(Material.DIAMOND_BLOCK));
 				player.sendMessage("Your pickaxe is now Sharpness " + sharp);
 				sharp++;
-			} else {
+			}*/ else {
 				player.sendMessage("Reached maximum Sharpness Level");
 			}
-		} else if (item != null && item.getType() == Material.IRON_BLOCK
+		} /*else if (item != null && item.getType() == Material.IRON_BLOCK
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			if (fortune == 0) {
 				fortune++;
@@ -262,7 +207,7 @@ public class SteveClass extends BaseClass {
 			} else {
 				player.sendMessage("Reached maximum Fortune Level");
 			}
-		} else if (item != null && item.getType() == Material.COAL_BLOCK
+		}*/ else if (item != null && item.getType() == Material.COAL_BLOCK
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			if (instance.blindness == 0) {
 				instance.blindness++;

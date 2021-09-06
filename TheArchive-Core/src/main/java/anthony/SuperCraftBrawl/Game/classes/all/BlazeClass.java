@@ -53,10 +53,12 @@ public class BlazeClass extends BaseClass {
 
 	@Override
 	public void SetItems(Inventory playerInv) {
-		playerInv.setItem(0,
-				ItemHelper.addEnchant(
-						ItemHelper.addEnchant(new ItemStack(Material.BLAZE_ROD), Enchantment.FIRE_ASPECT, 1),
-						Enchantment.KNOCKBACK, 2));
+		playerInv
+				.setItem(0,
+						ItemHelper.addEnchant(
+								ItemHelper.addEnchant(ItemHelper.addEnchant(new ItemStack(Material.BLAZE_ROD),
+										Enchantment.DAMAGE_ALL, 1), Enchantment.FIRE_ASPECT, 1),
+								Enchantment.KNOCKBACK, 2));
 		playerInv.setItem(1,
 				ItemHelper.addEnchant(ItemHelper.addEnchant(new ItemStack(Material.BOW), Enchantment.ARROW_INFINITE, 1),
 						Enchantment.DURABILITY, 1000));

@@ -76,10 +76,10 @@ public class SquidClass extends BaseClass {
 		Random rand = new Random();
 		int chance = rand.nextInt(9);
 
-		if (chance == 5) {
+		if (chance == 5 || chance == 1  || chance == 3 || chance == 7) {
 			if (event.getEntity() instanceof LivingEntity) {
 				((LivingEntity) event.getEntity())
-						.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 2, true));
+						.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 2, true));
 			}
 		}
 	}

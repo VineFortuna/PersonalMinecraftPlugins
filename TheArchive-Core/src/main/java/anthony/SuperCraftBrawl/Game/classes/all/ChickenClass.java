@@ -138,8 +138,7 @@ public class ChickenClass extends BaseClass {
 
 	@Override
 	public void SetNameTag() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

@@ -1,6 +1,5 @@
 package anthony.SuperCraftBrawl.gui;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,7 +26,58 @@ public class DonorClassesGUI implements InventoryProvider {
 
 	@Override
 	public void init(Player player, InventoryContents contents) {
-		contents.set(0, 0,
+		int a = 0;
+		int b = 0;
+		
+		for (ClassType type : ClassType.values()) {
+			if (type.getMinRank() == Rank.Vip) {
+				contents.set(a, b,
+						ClickableItem.of(
+								ItemHelper.setDetails(new ItemStack(type.getItem()), "" + type.getTag(),
+										"" + ChatColor.GRAY + type.getClassDesc(),
+										"" + ChatColor.YELLOW + ChatColor.BOLD + "VIP" + ChatColor.WHITE + "+ exclusive!"),
+								e -> {
+									Rank donor = type.getMinRank();
+
+									if (donor == null || player.hasPermission("scb." + donor.toString().toLowerCase())) {
+										main.getGameManager().playerSelectClass(player, type);
+										;
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD
+												+ "==============================================");
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| ");
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| ");
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| " + ChatColor.RESET
+												+ ChatColor.YELLOW + ChatColor.BOLD + "Selected Class: "
+												+ type.getTag());
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| " + ChatColor.RESET
+												+ ChatColor.YELLOW + ChatColor.BOLD + "Class Desc: " + ChatColor.RESET
+												+ ChatColor.YELLOW + type.getClassDesc());
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| ");
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD + "|| ");
+										player.sendMessage("" + ChatColor.DARK_GREEN + ChatColor.BOLD
+												+ "==============================================");
+										inv.close(player);
+									} else {
+										player.sendMessage("" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) "
+												+ ChatColor.RESET
+												+ "Stop tryna cheat the systemmmmm!! You need a rank to use this class");
+										inv.close(player);
+									}
+								}));
+				b++;
+				
+				if (b > 8) {
+					if (a == 0) {
+						a = 1;
+						b = 0;
+					} else if (a == 1) {
+						a = 2;
+						b = 0;
+					}
+				}
+			}
+		}
+		/*contents.set(0, 0,
 				ClickableItem.of(
 						ItemHelper.setDetails(new ItemStack(Material.IRON_AXE), "" + ChatColor.ITALIC + "Irongolem",
 								"" + ChatColor.GRAY + "Smack your enemies into the air while defending your village!",
@@ -355,7 +405,7 @@ public class DonorClassesGUI implements InventoryProvider {
 										+ "Stop tryna cheat the systemmmmm!! You need a rank to use this class");
 								inv.close(player);
 							}
-						}));
+						}));*/
 	}
 
 	@Override

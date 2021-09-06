@@ -11,6 +11,8 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
@@ -20,9 +22,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -60,6 +64,8 @@ import anthony.SuperCraftBrawl.gui.MysteryChestsGUI;
 import anthony.SuperCraftBrawl.gui.QuitGUI;
 import anthony.SuperCraftBrawl.playerdata.PlayerData;
 import net.md_5.bungee.api.ChatColor;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 
 public class GameManager implements Listener {
 	public HashMap<Maps, GameInstance> gameMap;
@@ -150,10 +156,11 @@ public class GameManager implements Listener {
 				if (instance.isInBounds(event.getTo())) {
 					if (baseClass.isDead == true) {
 						if (event.getTo() == null || event.getTo() != null) {
-
+							
 						}
 					} else {
 						player.teleport(event.getTo());
+						player.damage(1.7);
 					}
 				} else {
 					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "You cannot teleport there!");
@@ -224,6 +231,12 @@ public class GameManager implements Listener {
 		}
 
 		return mapName;
+	}
+
+	@EventHandler
+	public void MobBurn(EntityCombustEvent event) {
+		if (event.getEntityType() == EntityType.ZOMBIE || event.getEntityType() == EntityType.SKELETON)
+			event.setCancelled(true);
 	}
 
 	private HashMap<Player, BukkitRunnable> borderRunnables = new HashMap<>();
@@ -351,6 +364,45 @@ public class GameManager implements Listener {
 	}
 
 	@EventHandler
+	public void EntityDeathEvent​(EntityDeathEvent entity) {
+		if (entity.getEntityType() == EntityType.ZOMBIE || entity.getEntityType() == EntityType.SKELETON) {
+			entity.getDrops().clear();
+			entity.setDroppedExp(0);
+		}
+	}
+
+	@EventHandler
+	public void blooper(PlayerInteractEvent event) {
+		Player player = event.getPlayer();
+		ItemStack item = event.getItem();
+		GameInstance i = this.GetInstanceOfPlayer(player);
+
+		if (item != null && item.getType() == Material.RABBIT_FOOT
+				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+			int amount = item.getAmount();
+			for (int x = 0; x < 100; x++) {
+				int index = (int) (Math.random() * i.players.size());
+				Player target = i.players.get(index);
+
+				if (target != player) {
+					target.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 150, 2, true));
+					player.sendMessage(main.color("&6&l(!) &rYou blooped &e" + target.getName()));
+					target.sendMessage(main.color("&6&l(!) &rYou were blooped by &e" + player.getName()));
+					amount--;
+
+					if (amount == 0)
+						player.getInventory().clear(player.getInventory().getHeldItemSlot());
+					else
+						item.setAmount(amount);
+
+					x = 100;
+					return;
+				}
+			}
+		}
+	}
+
+	@EventHandler
 	public void votePaper(PlayerInteractEvent event) {
 		ItemStack item = event.getItem();
 		Player player = event.getPlayer();
@@ -420,22 +472,23 @@ public class GameManager implements Listener {
 	public void cosmeticMelon(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		ItemStack item = e.getItem();
-		GameInstance instance = getGameInstance(player);
 		PlayerData data = main.getDataManager().getPlayerData(player);
 
 		if (player.getWorld() == main.getLobbyWorld()) {
 			if (item != null && item.getType() == Material.MELON) {
 				if (player.getGameMode() != GameMode.SPECTATOR) {
 					if (shurikenCooldown.useAndResetCooldown()) {
-						int amount = item.getAmount();
 						if (data.melon > 0) {
 							data.melon--;
+							String msg = main.color("&9&l(!) &rYou have &e" + data.melon + " melons");
+							PacketPlayOutChat packet = new PacketPlayOutChat(
+									ChatSerializer.a("{\"text\":\"" + msg + "\"}"), (byte) 2);
+							CraftPlayer craft = (CraftPlayer) player;
+							craft.getHandle().playerConnection.sendPacket(packet);
 							player.playSound(player.getLocation(), Sound.EAT, 2, 1);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 110, 2));
 							if (data.melon == 0)
 								player.getInventory().clear(player.getInventory().getHeldItemSlot());
-							else
-								item.setAmount(data.melon);
 						}
 						e.setCancelled(true);
 					}
@@ -583,6 +636,7 @@ public class GameManager implements Listener {
 	public void activeGames(PlayerInteractEvent e) {
 
 		Player player = e.getPlayer();
+		GameInstance i = this.GetInstanceOfPlayer(player);
 
 		ItemStack eye = new ItemStack(Material.EYE_OF_ENDER);
 		ItemMeta meta = eye.getItemMeta();
@@ -617,6 +671,8 @@ public class GameManager implements Listener {
 					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "There are " + ChatColor.YELLOW
 							+ num + ChatColor.RESET + " games waiting/running right now");
 				}
+			} else if (i != null) {
+				e.setCancelled(true);
 			}
 		}
 

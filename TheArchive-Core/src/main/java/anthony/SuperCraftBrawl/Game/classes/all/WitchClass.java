@@ -42,6 +42,7 @@ public class WitchClass extends BaseClass {
 
 	@Override
 	public void SetArmour(EntityEquipment playerEquip) {
+		playerEquip.setHelmet(makePurple(new ItemStack(Material.LEATHER_HELMET)));
 		playerEquip.setChestplate(makePurple(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_CHESTPLATE), Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
 		playerEquip.setLeggings(makePurple(new ItemStack(Material.LEATHER_LEGGINGS)));
 		playerEquip.setBoots(makePurple(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_BOOTS), Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
@@ -78,15 +79,17 @@ public class WitchClass extends BaseClass {
 		Random rand = new Random();
 		int randomNum = rand.nextInt(itemList.length);
 		
-		
-		player.getInventory().addItem(new ItemStack(itemList[randomNum]));
-		
 		playerInv.setItem(0,
 				ItemHelper.addEnchant(ItemHelper.addEnchant(ItemHelper.setDetails(new ItemStack(Material.WHEAT), "" + ChatColor.BLACK + ChatColor.BOLD + "Magic Broom",
 						ChatColor.GRAY + "",
 						ChatColor.YELLOW + "Smack your enemies with this!"), Enchantment.DAMAGE_ALL, 2), Enchantment.KNOCKBACK, 1));
 		
 		player.getInventory().addItem(new ItemStack(itemList[randomNum]));
+		
+		if (itemList[randomNum].equals(item))
+			player.getInventory().addItem(item2);
+		else 
+			player.getInventory().addItem(item);
 	}
 
 	@Override
@@ -102,7 +105,13 @@ public class WitchClass extends BaseClass {
 								+ seconds + " seconds " + ChatColor.RESET + "to use this item again");
 			} else {
 				broom.restart();
-				double boosterStrength = 2.1;
+				double boosterStrength = 0.0;
+				if (player.getHealth() <= 8 && player.getHealth() > 0)
+					boosterStrength = 2.1;
+				else if (player.getHealth() <= 14 && player.getHealth() > 8)
+					boosterStrength = 1.5;
+				else if (player.getHealth() <= 20 && player.getHealth() > 15)
+					boosterStrength = 1.0;
 				for (Player gamePlayer : instance.players)
 					gamePlayer.playSound(player.getLocation(), Sound.BAT_TAKEOFF, 1, 1);
 				Vector vel = player.getLocation().getDirection().multiply(boosterStrength);

@@ -241,11 +241,17 @@ public class MysteryChestsGUI implements InventoryProvider {
 											};
 											runTimer.runTaskTimer(main, 0, 20);
 										}));
+				
+				
+				contents.set(1, 4, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.WORKBENCH),
+						main.color("&e&lClick here to craft a &9&lMystery Chest")),
+						e -> {
+							new MysteryChestCraftGUI(main).inv.open(player);
+						}));
 			} else {
 				contents.set(1, 4, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.BARRIER),
 						"" + ChatColor.RESET + ChatColor.RED + ChatColor.BOLD + "You do not have any Mystery Chests"),
 						e -> {
-
 						}));
 			}
 		}

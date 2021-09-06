@@ -14,7 +14,6 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.util.Vector;
 
 import anthony.SuperCraftBrawl.ItemHelper;
 import anthony.SuperCraftBrawl.Game.GameInstance;
@@ -41,7 +40,7 @@ public class TNTClass extends BaseClass {
 
 	@Override
 	public void SetArmour(EntityEquipment playerEquip) {
-		playerEquip.setHelmet(makeRed(new ItemStack(Material.LEATHER_HELMET)));
+		playerEquip.setHelmet(new ItemStack(Material.TNT));
 		playerEquip.setChestplate(makeRed(ItemHelper.addEnchant(new ItemStack(Material.LEATHER_CHESTPLATE),
 				Enchantment.PROTECTION_ENVIRONMENTAL, 4)));
 		playerEquip.setLeggings(makeRed(new ItemStack(Material.LEATHER_LEGGINGS)));
@@ -61,9 +60,7 @@ public class TNTClass extends BaseClass {
 						Enchantment.DURABILITY, 10000));
 		ItemStack tnt = getTNT();
 		tnt.setAmount(5);
-
 		playerInv.setItem(1, tnt);
-
 	}
 
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -73,16 +70,7 @@ public class TNTClass extends BaseClass {
 	@Override
 	public void UseItem(PlayerInteractEvent event) {
 		ItemStack item = event.getItem();
-		if (item.getType() == Material.WOOD_SWORD
-				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-			if (boosterCooldown.useAndResetCooldown()) {
-				double boosterStrength = 1.1;
-				for (Player gamePlayer : instance.players)
-					gamePlayer.playSound(player.getLocation(), Sound.BAT_TAKEOFF, 1, 1);
-				Vector vel = player.getLocation().getDirection().multiply(boosterStrength);
-				player.setVelocity(vel);
-			}
-		} else if (item.getType() == Material.TNT
+		if (item.getType() == Material.TNT
 				&& (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			if (player.getGameMode() != GameMode.SPECTATOR) {
 				if (shurikenCooldown.useAndResetCooldown()) {

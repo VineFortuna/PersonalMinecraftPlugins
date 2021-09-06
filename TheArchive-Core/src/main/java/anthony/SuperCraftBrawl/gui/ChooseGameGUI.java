@@ -81,6 +81,15 @@ public class ChooseGameGUI implements InventoryProvider {
 								main.frenzyIntro(player);
 								inv.close(player);
 							}));
+			contents.set(0, 4,
+					ClickableItem.of(
+							ItemHelper.setDetails(new ItemStack(Material.ENDER_CHEST),
+									"" + ChatColor.RESET + ChatColor.YELLOW + ChatColor.BOLD + "SuperCraftBlocks Lobby",
+								"", "" + ChatColor.RESET + ChatColor.GRAY + "Click to teleport to SCB Lobby!"),
+							e -> {
+								player.teleport(main.getSCBLoc());
+								inv.close(player);
+							}));
 			contents.set(1, 4, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.NETHER_STAR),
 					"" + ChatColor.RESET + ChatColor.YELLOW + ChatColor.BOLD + "Click to join SCB Normal!", "",
 					"" + ChatColor.RESET + ChatColor.GRAY + "Choose a class, fight your opponents",

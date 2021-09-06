@@ -151,6 +151,8 @@ commands:
       description: Staff help reply command
    points:
       description: Points command
+   give:
+      description: Give command
       
 permissions:
    scb.admin:
@@ -211,6 +213,7 @@ permissions:
          scb.rankBonus: true
          scb.cooldown: true
          scb.chat: true
+         scb.bypassFull: true
    scb.default:
       description: Default perms
       children:

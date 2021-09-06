@@ -53,11 +53,11 @@ public class SkeletonClass extends BaseClass {
 		playerInv.setItem(0,
 				ItemHelper.addEnchant(ItemHelper.addEnchant(ItemHelper.setDetails(new ItemStack(Material.BONE), ChatColor.GRAY + "Skeleton Bone",
 						ChatColor.GRAY + "Bone them to DEATH!",
-						ChatColor.YELLOW + "Smack your enemies with this!"), Enchantment.DAMAGE_ALL, 1), Enchantment.KNOCKBACK, 1));
+						ChatColor.YELLOW + "Smack your enemies with this!"), Enchantment.DAMAGE_ALL, 2), Enchantment.KNOCKBACK, 1));
 		playerInv.setItem(1,
 				ItemHelper.addEnchant(ItemHelper.addEnchant(ItemHelper.addEnchant(ItemHelper.setDetails(new ItemStack(Material.BOW), ChatColor.GRAY + "Skeleton Bow",
 						ChatColor.GRAY + "",
-						ChatColor.YELLOW + "Snipe your enemies with this!"), Enchantment.ARROW_KNOCKBACK, 2), Enchantment.ARROW_INFINITE, 1), Enchantment.DURABILITY, 10000));
+						ChatColor.YELLOW + "Snipe your enemies with this!"), Enchantment.ARROW_KNOCKBACK, 1), Enchantment.ARROW_INFINITE, 1), Enchantment.DURABILITY, 10000));
 		playerInv.setItem(2, new ItemStack(Material.ARROW));
 	}
 

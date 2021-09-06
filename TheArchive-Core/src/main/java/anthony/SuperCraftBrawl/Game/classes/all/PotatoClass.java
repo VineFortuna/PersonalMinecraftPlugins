@@ -4,11 +4,10 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +22,7 @@ import anthony.SuperCraftBrawl.Game.GameInstance;
 import anthony.SuperCraftBrawl.Game.classes.BaseClass;
 import anthony.SuperCraftBrawl.Game.classes.ClassType;
 
-public class PotatoClass extends BaseClass implements Listener {
+public class PotatoClass extends BaseClass{
 
 	private ItemStack potato = new ItemStack(Material.POTATO_ITEM);
 	private ItemStack bakedPotato = new ItemStack(Material.BAKED_POTATO);
@@ -32,7 +31,6 @@ public class PotatoClass extends BaseClass implements Listener {
 
 	public PotatoClass(GameInstance instance, Player player) {
 		super(instance, player);
-		this.getMain().getServer().getPluginManager().registerEvents(this, getMain());
 	}
 
 	public Main getMain() {
@@ -73,10 +71,9 @@ public class PotatoClass extends BaseClass implements Listener {
 		playerInv.setItem(0, ItemHelper.addEnchant(potato, Enchantment.DAMAGE_ALL, sharpness));
 	}
 
-	@EventHandler
-	public void BakedPotato(PlayerMoveEvent event) {
-		if (event.getPlayer() instanceof Player) {
-			Player player = (Player) event.getPlayer();
+	@Override
+	public void TakeDamage(EntityDamageEvent event) {
+		if (event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK) {
 			if (player.getFireTicks() > 0) {
 				if (!(player.getInventory().contains(bakedPotato))) {
 					player.getInventory().setItem(0,

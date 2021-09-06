@@ -15,8 +15,12 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -33,6 +37,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import anthony.SuperCraftBrawl.ItemHelper;
@@ -65,6 +70,7 @@ public class GameInstance {
 	public List<Player> players;
 	public List<Player> spectators;
 	public HashMap<Player, BaseClass> classes;
+	public HashMap<Player, BaseClass> oldClasses;
 	public List<Player> playerPosition = new ArrayList<>();
 	public HashMap<Player, FastBoard> boards = new HashMap();
 	private HashMap<Player, ClassType> classSelection = new HashMap<>();
@@ -86,6 +92,7 @@ public class GameInstance {
 		this.players = new ArrayList<Player>();
 		this.spectators = new ArrayList<Player>();
 		classes = new HashMap<>();
+		oldClasses = new HashMap<>();
 		InitialiseMap();
 	}
 
@@ -240,15 +247,17 @@ public class GameInstance {
 		if (state == GameState.WAITING) {
 			if (!players.contains(player)) {
 
-				if (gameType == GameType.NORMAL && players.size() >= 5) {
-					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
-					return GameReason.FULL;
-				} else if (gameType == GameType.DUEL && players.size() >= 2) {
-					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
-					return GameReason.FULL;
-				} else if (gameType == GameType.CTF && players.size() > 0) {
-					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
-					return GameReason.FULL;
+				if (!(player.hasPermission("scb.bypassFull"))) {
+					if (gameType == GameType.NORMAL && players.size() >= 5) {
+						player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
+						return GameReason.FULL;
+					} else if (gameType == GameType.DUEL && players.size() >= 2) {
+						player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
+						return GameReason.FULL;
+					} else if (gameType == GameType.CTF && players.size() > 0) {
+						player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "This game is full!");
+						return GameReason.FULL;
+					}
 				}
 
 				players.add(player);
@@ -757,11 +766,81 @@ public class GameInstance {
 		return new Location(mapWorld, v.getX(), v.getY(), v.getZ());
 	}
 
+	public double boundsX, boundsZ;
+	public BukkitRunnable moveBar;
+	public int resetBoundsX = 0;
+	public int resetBoundsZ = 0;
+
+	public void moveBarrier() {
+		if (moveBar == null) {
+			moveBar = new BukkitRunnable() {
+				int ticks = 0;
+
+				@Override
+				public void run() {
+					if (state == GameState.ENDED) {
+						MapInstance instance = map.GetInstance();
+						if (resetBoundsX != 0)
+							instance.boundsX = resetBoundsX + instance.boundsX;
+						if (resetBoundsZ != 0)
+							instance.boundsZ = resetBoundsZ + instance.boundsZ;
+						moveBar = null;
+						this.cancel();
+					}
+
+					if (ticks == 600) {
+						for (Player gamePlayer : players) {
+							int minutes = (ticks / 120);
+							gamePlayer.sendTitle(
+									gameManager.getMain().color("&9Barrier will begin moving in &r" + minutes + "m"),
+									"");
+							gamePlayer.sendMessage(
+									gameManager.getMain().color("&9Barrier will begin moving in &r" + minutes + "m"));
+						}
+					} else if (ticks == 840) {
+						for (Player gamePlayer : players) {
+							int seconds = (ticks + 20) - 800;
+							gamePlayer.sendTitle(
+									gameManager.getMain().color("&9Barrier will begin moving in &r" + seconds + "s"),
+									"");
+							gamePlayer.sendMessage(
+									gameManager.getMain().color("&9Barrier will begin moving in &r" + seconds + "s"));
+						}
+					} else if (ticks == 900) {
+						for (Player gamePlayer : players) {
+							gamePlayer.sendTitle(gameManager.getMain().color("&9Barrier moving is now active!"), "");
+							gamePlayer.sendMessage(gameManager.getMain().color("&9Barrier moving is now active!"));
+							MapInstance mapInstance = map.GetInstance();
+							mapInstance.boundsX -= 3;
+							resetBoundsX += 3;
+							mapInstance.boundsZ -= 3;
+							resetBoundsZ += 3;
+						}
+					} else if (ticks == 915) {
+						for (Player gamePlayer : players) {
+							ticks = 480;
+							int seconds = (ticks / 60);
+							// isInBounds(gamePlayer.getLocation());
+							gamePlayer.sendTitle(gameManager.getMain().color("&9Barrier has been moved &r3 blocks"),
+									gameManager.getMain().color("&eNext barrier move will be in &r2m"));
+							gamePlayer.sendMessage(gameManager.getMain().color("&9Barrier has been moved &r3 blocks"));
+							gamePlayer.sendMessage(gameManager.getMain().color("&eNext barrier move will be in &r2m"));
+						}
+					}
+
+					ticks++;
+				}
+			};
+			moveBar.runTaskTimer(gameManager.getMain(), 0, 20);
+		}
+	}
+
 	public boolean isInBounds(Location loc) {
 		MapInstance mapInstance = map.GetInstance();
 		Vector v = mapInstance.center;
 		Location centre = new Location(mapWorld, v.getX(), v.getY(), v.getZ());
-		double boundsX = mapInstance.boundsX, boundsZ = mapInstance.boundsZ;
+		boundsX = mapInstance.boundsX;
+		boundsZ = mapInstance.boundsZ;
 
 		if (Math.abs(centre.getX() - loc.getX()) > boundsX)
 			return false;
@@ -849,7 +928,7 @@ public class GameInstance {
 			player.setGameMode(GameMode.ADVENTURE);
 			BaseClass baseClass = classes.get(player);
 			Random random = new Random();
-			int chance = rand.nextInt(5);
+			int chance = rand.nextInt(6);
 
 			if (chance == 0) {
 				player.sendTitle("" + baseClass.getType().getTag(), "Remember what Sensei said.. Fight smart");
@@ -861,7 +940,9 @@ public class GameInstance {
 				player.sendTitle("" + baseClass.getType().getTag(), "Never underestimate your enemy");
 			} else if (chance == 4) {
 				player.sendTitle("" + baseClass.getType().getTag(), "No Mercy...");
-			}
+			} else if (chance == 5) {
+				player.sendTitle("" + baseClass.getType().getTag(), "Only the strong will survive..");
+			} 
 		}
 
 		BukkitRunnable runnable = new BukkitRunnable() {
@@ -878,8 +959,34 @@ public class GameInstance {
 		runnable.runTaskTimer(gameManager.getMain(), 0, 1);
 		runnables.add(runnable);
 		gameManager.getMain().getNPCManager().updateNpc(map);
-
+		moveBarrier();
+		Events();
+		for (Player gamePlayer : players)
+			sendScoreboardUpdate(gamePlayer);
 	}
+	
+	private String shortenString(String msg, int length) {
+		if (msg.length() <= length)
+			return msg;
+		else
+			return msg.substring(0, length);
+	}
+	
+	@SuppressWarnings("deprecation")
+    public void sendScoreboardUpdate(Player player) {
+        for (Player pl : Bukkit.getOnlinePlayers()) {
+            Scoreboard board = pl.getScoreboard();
+            Team team = board.getTeam(player.getName());
+            if (team == null) {
+                team = board.registerNewTeam(player.getName());
+                team.addPlayer(player);
+            }
+            BaseClass baseClass = classes.get(player);
+            String type = shortenString(baseClass.getType().getTag(), 16);
+            int length = player.getName().length() + type.length();
+            team.setPrefix(type);
+        }
+    }
 
 	public Location getItemSpawnLoc() {
 		Random rand = new Random();
@@ -973,12 +1080,16 @@ public class GameInstance {
 		pot8.setSplash(true);
 		pot8.apply(item8);
 
+		ItemStack blooper = ItemHelper.setDetails(new ItemStack(Material.RABBIT_FOOT),
+				gameManager.getMain().color("&6&lBlooper"));
+
 		List<ItemStack> items = Arrays.asList(new ItemStack(Material.GOLDEN_APPLE),
 				ItemHelper.setDetails(new ItemStack(Material.GOLDEN_APPLE, 1, (short) 1),
 						"" + ChatColor.BLACK + ChatColor.BOLD + "Notch Apple"),
 				new ItemStack(Material.STONE), item5, item7, item7, item, item2, item5, item5, item2, item7,
 				new ItemStack(Material.GOLDEN_APPLE), item6, item, extraLife, item, new ItemStack(Material.MILK_BUCKET),
-				new ItemStack(Material.MILK_BUCKET), new ItemStack(Material.MILK_BUCKET));
+				new ItemStack(Material.MILK_BUCKET), new ItemStack(Material.MILK_BUCKET), blooper, blooper, blooper,
+				blooper);
 		return items.get(random.nextInt(items.size()));
 	}
 
@@ -990,6 +1101,64 @@ public class GameInstance {
 	}
 
 	private Scoreboard c;
+	private BukkitRunnable aBoard;
+	private BukkitRunnable eventRunnable;
+
+	public void Events() {
+		if (eventRunnable == null) {
+			eventRunnable = new BukkitRunnable() {
+				int ticks = 0;
+
+				@Override
+				public void run() {
+					if (state == GameState.STARTED) {
+						//For removing arrows on ground:
+						for (Entity entity : mapWorld.getEntities())
+							if (entity instanceof Arrow)
+								if (entity.isOnGround())
+									entity.remove();
+						
+						//For TNT event & mob spawning
+						if (ticks == 180) {
+							MapInstance instance = map.GetInstance();
+							for (Vector vec : instance.spawnPos) {
+								TNTPrimed tnt = mapWorld.spawn(
+										new Location(mapWorld, vec.getX(), vec.getY() + 30, vec.getZ()).add(0, 1, 0),
+										TNTPrimed.class);
+								tnt.setFuseTicks(65);
+							}
+							TellAll(gameManager.getMain()
+									.color("&c&lHerobrine> &cMaybe you'll like my TNT instead? :)"));
+							ticks = -120;
+						} else if (ticks == 120) {
+							MapInstance instance = map.GetInstance();
+							TellAll(gameManager.getMain()
+									.color("&c&lHerobrine> &cMuahaha.. Enjoy my army of Zombies & Skeletons :)"));
+							for (Vector vec : instance.spawnPos) {
+								Random rand = new Random();
+								int chance = rand.nextInt(2);
+
+								if (chance == 0)
+									mapWorld.spawnEntity(
+											new Location(mapWorld, vec.getX(), vec.getY() + 10, vec.getZ()),
+											EntityType.ZOMBIE);
+								else if (chance == 1)
+									mapWorld.spawnEntity(
+											new Location(mapWorld, vec.getX(), vec.getY() + 10, vec.getZ()),
+											EntityType.SKELETON);
+							}
+						}
+					} else {
+						eventRunnable = null;
+						this.cancel();
+					}
+
+					ticks++;
+				}
+			};
+			eventRunnable.runTaskTimer(getManager().getMain(), 0, 20);
+		}
+	}
 
 	public void GameScoreboard() {
 
@@ -1002,7 +1171,6 @@ public class GameInstance {
 				Objective o = c.registerNewObjective("Gold", "");
 				livesObjective = o;
 				o.setDisplaySlot(DisplaySlot.SIDEBAR);
-
 				o.setDisplayName("" + ChatColor.YELLOW + ChatColor.BOLD + map.toString() + " " + ChatColor.RESET
 						+ ChatColor.ITALIC + "CTF");
 
@@ -1030,14 +1198,64 @@ public class GameInstance {
 				ScoreboardManager m = Bukkit.getScoreboardManager();
 				c = m.getNewScoreboard();
 
-				Objective o = c.registerNewObjective("Gold", "");
+				Objective o = c.registerNewObjective("" + ChatColor.BOLD + map.toString(), "");
 				livesObjective = o;
 				o.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-				o.setDisplayName(truncateString("" + ChatColor.YELLOW + ChatColor.BOLD + map.toString()
-						+ (gameType == GameType.FRENZY ? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)" : ""),
-						32));
+				if (aBoard == null) {
+					aBoard = new BukkitRunnable() {
+						int ticks = 0;
 
+						@Override
+						public void run() {
+							if (state == GameState.STARTED) {
+								// WRITE SOME DEBUG MSGS TO TEST
+								if (ticks == 0) {
+									o.setDisplayName(
+											truncateString("" + ChatColor.RESET + ChatColor.BOLD + map.toString()
+													+ (gameType == GameType.FRENZY
+															? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)"
+															: ""),
+													32));
+								} else if (ticks == 1) {
+									o.setDisplayName(
+											truncateString("" + ChatColor.YELLOW + ChatColor.BOLD + map.toString()
+													+ (gameType == GameType.FRENZY
+															? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)"
+															: ""),
+													32));
+								} else if (ticks == 2) {
+									o.setDisplayName(
+											truncateString("" + ChatColor.BLUE + ChatColor.BOLD + map.toString()
+													+ (gameType == GameType.FRENZY
+															? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)"
+															: ""),
+													32));
+								} else if (ticks == 3) {
+									o.setDisplayName(truncateString("" + ChatColor.RED + ChatColor.BOLD + map.toString()
+											+ (gameType == GameType.FRENZY
+													? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)"
+													: ""),
+											32));
+								} else if (ticks == 4) {
+									o.setDisplayName(
+											truncateString("" + ChatColor.RESET + ChatColor.BOLD + map.toString()
+													+ (gameType == GameType.FRENZY
+															? "" + ChatColor.GRAY + ChatColor.ITALIC + " (frenzy)"
+															: ""),
+													32));
+									ticks = 0;
+								}
+							} else {
+								aBoard = null;
+								this.cancel();
+							}
+
+							ticks++;
+						}
+					};
+					aBoard.runTaskTimer(getManager().getMain(), 0, 20);
+				}
 				Score gold0 = o.getScore("");
 
 				for (Player player : players) {
@@ -1219,6 +1437,11 @@ public class GameInstance {
 	public void EndGame() {
 		state = GameState.ENDED;
 		gameManager.getMain().getNPCManager().updateRandomNpc();
+		for (Entity en : mapWorld.getEntities()) {
+			if (!(en instanceof Player)) {
+				en.remove();
+			}
+		}
 
 		for (Player spectator : spectators) {
 			gameManager.getMain().LobbyBoard(spectator);
@@ -1344,6 +1567,7 @@ public class GameInstance {
 		winner.getInventory().clear();
 		winner.setGameMode(GameMode.ADVENTURE);
 		for (Player player : players) {
+			gameManager.getMain().sendScoreboardUpdate(player);
 			if (player == winner) {
 				BaseClass baseClass = classes.get(winner);
 				if (baseClass != null) {
@@ -1467,26 +1691,6 @@ public class GameInstance {
 
 			player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.GREEN + "You have earned "
 					+ baseClass.totalTokens + " Tokens!");
-
-			if (player == winner) {
-				PlayerData data = gameManager.getMain().getDataManager().getPlayerData(winner);
-
-				Random rand = new Random();
-				int chance = rand.nextInt(15);
-
-				if (chance == 10) {
-					data.mysteryChests++;
-					winner.sendMessage("" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "(!) " + ChatColor.RESET
-							+ "You have " + ChatColor.YELLOW + "1 " + ChatColor.RESET + "new Mystery Chest available!");
-				} else if (chance == 12) {
-					data.mysteryChests += 2;
-					winner.sendMessage(
-							"" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "(!) " + ChatColor.RESET + "You have "
-									+ ChatColor.YELLOW + "2 " + ChatColor.RESET + "new Mystery Chests available!");
-				}
-				winner.sendMessage("" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "(!) " + ChatColor.RESET
-						+ "You have gained " + ChatColor.YELLOW + baseClass2.totalExp + " EXP!");
-			}
 
 			player.getInventory().clear();
 			player.removePotionEffect(PotionEffectType.SPEED);
@@ -1622,7 +1826,8 @@ public class GameInstance {
 		}
 	}
 
-	public BaseClass oldBaseClass; // Public because we want to use this variable in BaseClass.java
+	// public BaseClass oldBaseClass; // Public because we want to use this variable
+	// in BaseClass.java
 
 	private void rerandomizeClass(Player player) {
 		BaseClass baseClass = classes.get(player);
@@ -1630,7 +1835,8 @@ public class GameInstance {
 		if (baseClass.getLives() > 1) {
 			ClassType classType = ClassType.values()[random.nextInt(ClassType.values().length)];
 			BaseClass newBaseClass = classType.GetClassInstance(this, player);
-			oldBaseClass = classes.get(player);
+			BaseClass oldBaseClass = classes.get(player);
+			oldClasses.put(player, oldBaseClass);
 
 			Score newScore = livesObjective
 					.getScore(truncateString(classType.getTag() + " " + ChatColor.WHITE + player.getName() + "", 40));

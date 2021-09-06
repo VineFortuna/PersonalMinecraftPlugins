@@ -33,7 +33,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
+import anthony.Duels.game.DuelManager;
 import anthony.SuperCraftBrawl.Game.GameInstance;
 import anthony.SuperCraftBrawl.Game.GameManager;
 import anthony.SuperCraftBrawl.Game.GameState;
@@ -52,6 +55,7 @@ import anthony.SuperCraftBrawl.gui.InventoryGUI;
 import anthony.SuperCraftBrawl.gui.QuitGUI;
 import anthony.SuperCraftBrawl.gui.SMMGUI;
 import anthony.SuperCraftBrawl.gui.StatsGUI;
+import anthony.SuperCraftBrawl.gui.StatsTargetGUI;
 import anthony.SuperCraftBrawl.gui.pvpGUI;
 import anthony.SuperCraftBrawl.npcs.NPCManager;
 import anthony.SuperCraftBrawl.playerdata.DatabaseManager;
@@ -87,6 +91,8 @@ public class Main extends JavaPlugin implements Listener {
 	private Punishment punishment;
 	private ActiveGamesGUI ag;
 	public boolean tournament = false;
+	private DuelManager dm;
+	public HashMap<Player, Boolean> ao = new HashMap<>();
 
 	public Main() {
 		this.staffchat = new ArrayList<Player>();
@@ -111,6 +117,10 @@ public class Main extends JavaPlugin implements Listener {
 		return npcManager;
 	}
 	
+	public DuelManager getDuelManager() {
+		return dm;
+	}
+
 	public ActiveGamesGUI getActiveGames() {
 		return ag;
 	}
@@ -515,10 +525,11 @@ public class Main extends JavaPlugin implements Listener {
 		rankManager = new RankManager(this);
 		punishment = new Punishment(this);
 		ag = new ActiveGamesGUI(this);
+		dm = new DuelManager(this);
 		// cheat = new AntiCheat(this);
 
 		String[] commandTypes = { "join", "leave", "players", "class", "test", "spectate", "setrank", "startgame",
-				"setlives", "purchases" };
+				"setlives", "purchases", "give" };
 
 		for (String command : commandTypes) {
 			PluginCommand pluginCommand = this.getCommand(command);
@@ -992,6 +1003,7 @@ public class Main extends JavaPlugin implements Listener {
 				this.getGameManager().RemovePlayerFromMap(player, null, player);
 				SendPlayerToHub(player);
 				player.setAllowFlight(true);
+				this.sendScoreboardUpdate(player);
 
 				player.getInventory().clear();
 				player.removePotionEffect(PotionEffectType.SPEED);
@@ -1268,7 +1280,7 @@ public class Main extends JavaPlugin implements Listener {
 					int x = Integer.parseInt(args[0]);
 					int y = Integer.parseInt(args[1]);
 					int z = Integer.parseInt(args[2]);
-					
+
 					player.teleport(new Location(player.getWorld(), x, y, z));
 					player.sendMessage(color("&r&l(!) &rTeleporting to &e" + x + "&r, &e" + y + "&r, &e" + z));
 				}
@@ -1445,20 +1457,14 @@ public class Main extends JavaPlugin implements Listener {
 				new StatsGUI(this).inv.open(player);
 			} else if (args.length == 1) {
 				Player target = Bukkit.getServer().getPlayerExact(args[0]);
-				try {
-					PlayerData data = this.getDataManager().getPlayerData(target);
-					if (target != null) {
-						new StatsGUI(this).inv.open(player);
-						player.sendMessage(
-								"" + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) " + ChatColor.RESET + "Opening "
-										+ ChatColor.YELLOW + target.getName() + "'s" + ChatColor.RESET + " statistics");
-					} else {
-						player.sendMessage(
-								"" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "The specified target is not online!");
-					}
-				} catch (Exception e) {
-					player.sendMessage("" + ChatColor.BOLD + "(!) " + ChatColor.RESET
-							+ "That user has never joined the server before!");
+				if (target != null) {
+					new StatsTargetGUI(this, target).inv.open(player);
+					player.sendMessage(
+							"" + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) " + ChatColor.RESET + "Opening "
+									+ ChatColor.YELLOW + target.getName() + "'s" + ChatColor.RESET + " statistics");
+				} else {
+					player.sendMessage(
+							"" + ChatColor.BOLD + "(!) " + ChatColor.RESET + "The specified target is not online!");
 				}
 			}
 		}
@@ -1591,6 +1597,19 @@ public class Main extends JavaPlugin implements Listener {
 		LobbyBoard(player);
 
 	}
+	
+	@SuppressWarnings("deprecation")
+    public void sendScoreboardUpdate(Player player) {
+        for (Player pl : Bukkit.getOnlinePlayers()) {
+            Scoreboard board = pl.getScoreboard();
+            Team team = board.getTeam(player.getName());
+            if (team == null) {
+                team = board.registerNewTeam(player.getName());
+                team.addPlayer(player);
+            }
+            team.setPrefix(this.getRankManager().getRank(player).getTagWithSpace());
+        }
+    }
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
@@ -1598,6 +1617,7 @@ public class Main extends JavaPlugin implements Listener {
 		Player p = e.getPlayer();
 		String pname = p.getName();
 		p.setGameMode(GameMode.ADVENTURE);
+		sendScoreboardUpdate(p);
 
 		// Message to send the server on join
 		e.setJoinMessage("" + ChatColor.BOLD + "[" + ChatColor.YELLOW + ChatColor.BOLD + "+" + ChatColor.RESET
@@ -1605,6 +1625,12 @@ public class Main extends JavaPlugin implements Listener {
 				+ ChatColor.AQUA + pname + ChatColor.RESET + ChatColor.GRAY + " has joined");
 
 		// Set rank on tablist
+		String owner = "";
+		for (Player players : Bukkit.getOnlinePlayers()) {
+			if (getRankManager().getRank(players) == Rank.Owner) {
+				owner += "" + getRankManager().getRank(p).getTagWithSpace() + ChatColor.RESET + p.getName();
+			}
+		}
 		p.setPlayerListName("" + getRankManager().getRank(p).getTagWithSpace() + ChatColor.RESET + p.getName());
 
 		p.getInventory().setHelmet(new ItemStack(Material.AIR, 1));

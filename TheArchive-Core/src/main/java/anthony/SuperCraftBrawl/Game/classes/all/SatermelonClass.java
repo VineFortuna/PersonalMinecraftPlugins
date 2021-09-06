@@ -47,7 +47,7 @@ public class SatermelonClass extends BaseClass{
 		
 		SkullMeta meta = (SkullMeta) playerskull.getItemMeta();
 		
-		meta.setOwner("Satermelon");
+		meta.setOwner("SuperCraftBlocks");
 		meta.setDisplayName("");
 		
 		playerskull.setItemMeta(meta);

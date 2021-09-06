@@ -13,12 +13,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.Lists;
 
+import anthony.Duels.game.maps.DuelMaps;
 import anthony.SuperCraftBrawl.Main;
 import anthony.SuperCraftBrawl.Game.GameInstance;
 import anthony.SuperCraftBrawl.Game.GameState;
@@ -145,8 +147,8 @@ public class Commands implements CommandExecutor, TabCompleter {
 											+ num);
 									baseClass2.score.setScore(baseClass2.lives);
 								} else {
-									player.sendMessage("" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) "
-											+ ChatColor.RESET + "Please specify a player!");
+									player.sendMessage("" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD
+											+ "(!) " + ChatColor.RESET + "Please specify a player!");
 								}
 							} else {
 								player.sendMessage("" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) "
@@ -209,6 +211,26 @@ public class Commands implements CommandExecutor, TabCompleter {
 					player.sendMessage("" + ChatColor.WHITE + ChatColor.BOLD + "(!) " + ChatColor.RESET
 							+ "Incorrect usage! Try doing: " + ChatColor.RESET + ChatColor.GREEN + "/join <mapname>");
 
+				return true;
+
+			case "duel":
+				if (args.length > 0) {
+					String mapName = args[0];
+					DuelMaps map = null;
+
+					for (DuelMaps maps : DuelMaps.values()) {
+						if (maps.toString().equalsIgnoreCase(mapName)) {
+							map = maps;
+							break;
+						}
+					}
+
+					if (map != null) {
+						main.getDuelManager().JoinGame(player, map);
+					} else {
+						player.sendMessage(ChatColor.BOLD + "(!) " + ChatColor.RESET + "This map does not exist!");
+					}
+				}
 				return true;
 
 			case "spectate":
@@ -347,6 +369,7 @@ public class Commands implements CommandExecutor, TabCompleter {
 					main.LobbyItems(player);
 					player.sendMessage("" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD + "(!) "
 							+ ChatColor.RESET + "You have left your game");
+					main.sendScoreboardUpdate(player);
 
 					player.removePotionEffect(PotionEffectType.SPEED);
 					player.removePotionEffect(PotionEffectType.WEAKNESS);
@@ -388,6 +411,58 @@ public class Commands implements CommandExecutor, TabCompleter {
 				}
 				return true;
 
+			case "give":
+				if (args.length > 0 && args.length < 4) {
+					Player target = Bukkit.getServer().getPlayerExact(args[0]);
+					Material mat = testMaterial(args[1]);
+					int amount = Integer.parseInt(args[2]);
+					ItemStack item = null;
+					if (mat != null) {
+						item = new ItemStack(mat, amount);
+						target.getInventory().addItem(item);
+					} else {
+						player.sendMessage(main.color("&c&l(!) &rInvalid item!"));
+						return false;
+					}
+					if (target != player) {
+						target.sendMessage(main.color("&e&l(!) &rYou were given &e " + amount + " " + item.getType()));
+					} else {
+						player.sendMessage(main.color("&e&l(!) &rYou were given &e " + amount + " " + item.getType()));
+					}
+				} else if (args.length > 3 && args.length < 6) {
+					Player target = Bukkit.getServer().getPlayerExact(args[0]);
+					Material mat = testMaterial(args[1]);
+					int amount = Integer.parseInt(args[2]);
+					Enchantment ench = testEnchant(args[3]);
+					int level = Integer.parseInt(args[4]);
+					ItemStack item = null;
+
+					if (level > 0) {
+						if (mat != null) {
+							item = new ItemStack(mat, amount);
+							enchantments(item, ench, level);
+							target.getInventory().addItem(item);
+						} else {
+							player.sendMessage(main.color("&c&l(!) &rInvalid item!"));
+							return false;
+						}
+						if (target != player) {
+							target.sendMessage(
+									main.color("&e&l(!) &rYou were given &e " + amount + " " + item.getType()));
+						} else {
+							player.sendMessage(main.color("&e&l(!) &rYou were given &e " + amount + " " + item.getType()
+									+ " &rwith &e " + ench.getName() + " " + level));
+						}
+					} else {
+						player.sendMessage(main.color(
+								"&c&l(!) &rPlease enter an Enchantment level higher than 0!"));
+					}
+				} else {
+					player.sendMessage(main.color(
+							"&c&l(!) &rIncorrect usage! Try doing: &e/give <player> <item> <amount> <enchantment> <level>"));
+				}
+				return true;
+
 			case "players":
 				GameInstance instance = main.getGameManager().GetInstanceOfPlayer(player);
 				if (instance != null) {
@@ -409,6 +484,27 @@ public class Commands implements CommandExecutor, TabCompleter {
 			sender.sendMessage("Hey! You can't use this in the terminal!");
 		}
 		return true;
+	}
+
+	private ItemStack enchantments(ItemStack item, Enchantment ench, int level) {
+		item.addUnsafeEnchantment(ench, level);
+		return item;
+	}
+
+	private Material testMaterial(String st) {
+		try {
+			return Material.getMaterial(st.toUpperCase());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private Enchantment testEnchant(String st) {
+		try {
+			return Enchantment.getByName(st.toUpperCase());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {

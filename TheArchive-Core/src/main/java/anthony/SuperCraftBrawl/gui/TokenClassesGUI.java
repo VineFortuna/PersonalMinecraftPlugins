@@ -114,7 +114,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Chicken, player);
 					}
 				}));
-		contents.set(0, 3, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.COAL_BLOCK),
+		/*contents.set(1, 3, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.COAL_BLOCK),
 				"" + ChatColor.ITALIC + "DarkSethBling",
 				"" + ChatColor.GRAY + "The evil counterpart of the redstone King", "",
 				playerData.isPurchased(ClassType.DarkSethBling) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -141,8 +141,8 @@ public class TokenClassesGUI implements InventoryProvider {
 					} else {
 						new PurchaseClassInventory(main, ClassType.DarkSethBling, player);
 					}
-				}));
-		contents.set(0, 4, ClickableItem.of(
+				}));*/
+		contents.set(0, 3, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.WHEAT), "" + ChatColor.ITALIC + "Witch",
 						"" + ChatColor.GRAY + "She lives in daydreams with me! (She)", "",
 						playerData.isPurchased(ClassType.Witch) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -170,7 +170,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Witch, player);
 					}
 				}));
-		contents.set(0, 5, ClickableItem.of(
+		contents.set(0, 4, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.WOOL), "" + ChatColor.ITALIC + "Sheep",
 						"" + ChatColor.GRAY + "Different colors of wool gives",
 						"" + ChatColor.GRAY + "you different powers!", "",
@@ -199,7 +199,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Sheep, player);
 					}
 				}));
-		contents.set(0, 6, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.SNOW_BALL),
+		contents.set(0, 5, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.SNOW_BALL),
 				"" + ChatColor.ITALIC + "SnowGolem", "" + ChatColor.GRAY + "This is a SnowGolem, not a Snowman",
 				"" + ChatColor.GRAY + "Get it right pleb!", "",
 				playerData.isPurchased(ClassType.SnowGolem) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -227,7 +227,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.SnowGolem, player);
 					}
 				}));
-		contents.set(0, 7, ClickableItem.of(
+		contents.set(0, 6, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.GOLDEN_CARROT), "" + ChatColor.ITALIC + "Bunny",
 						"" + ChatColor.GRAY + "Easter Bunny is coming to town!", "",
 						playerData.isPurchased(ClassType.Bunny) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -255,7 +255,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Bunny, player);
 					}
 				}));
-		contents.set(0, 8, ClickableItem.of(
+		contents.set(0, 7, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.GOLD_INGOT), "" + ChatColor.ITALIC + "ButterBro",
 						"" + ChatColor.GRAY + "Yo, you there Sky??", "",
 						playerData.isPurchased(ClassType.ButterBro) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -283,7 +283,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.ButterBro, player);
 					}
 				}));
-		contents.set(1, 0, ClickableItem.of(
+		contents.set(0, 8, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.WOOD_PICKAXE), "" + ChatColor.ITALIC + "Steve",
 						"" + ChatColor.GRAY + "OMG OMG GET HYPED!!!!", "",
 						playerData.isPurchased(ClassType.Steve) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -311,7 +311,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Steve, player);
 					}
 				}));
-		contents.set(1, 1, ClickableItem.of(
+		contents.set(1, 0, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.GRASS), "" + ChatColor.ITALIC + "Notch",
 						"" + ChatColor.GRAY + "The owner of Minecraft..", "",
 						playerData.isPurchased(ClassType.Notch) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -339,7 +339,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Notch, player);
 					}
 				}));
-		contents.set(1, 2, ClickableItem.of(
+		contents.set(1, 1, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.POTATO_ITEM), "" + ChatColor.ITALIC + "Potato",
 						"" + ChatColor.GRAY + "Who doesn't like potatoes?!", "",
 						playerData.isPurchased(ClassType.Potato) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"
@@ -367,7 +367,7 @@ public class TokenClassesGUI implements InventoryProvider {
 						new PurchaseClassInventory(main, ClassType.Potato, player);
 					}
 				}));
-		contents.set(1, 3, ClickableItem.of(
+		contents.set(1, 2, ClickableItem.of(
 				ItemHelper.setDetails(new ItemStack(Material.RAW_FISH), "" + ChatColor.ITALIC + "Ocelot",
 						"" + ChatColor.GRAY + "Chase down your opponents with your high speed and Purr Attack", "",
 						playerData.isPurchased(ClassType.Ocelot) ? "" + ChatColor.YELLOW + ChatColor.BOLD + "Purchased"

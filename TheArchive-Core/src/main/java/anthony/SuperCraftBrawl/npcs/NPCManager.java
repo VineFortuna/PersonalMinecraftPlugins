@@ -98,8 +98,9 @@ public class NPCManager implements Listener {
 				new MapNPC(this, Maps.Tropical, new Location(lw, 29.487, 162, -395.502, 50, 0), skin),
 				new MapNPC(this, Maps.Frigid, new Location(lw, -47.526, 162, -394.467, 50, 0), skin),
 				new MapNPC(this, Maps.JungleRiver, new Location(lw, 34.500, 162, -393.475, 50, 0), skin),
-				new MapNPC(this, Maps.EggHunt, new Location(lw, 34.502, 162, -419.485, 50, 0), skin),
-				new MapNPC(this, Maps.NorthernSeas, new Location(lw, -12.512, 162, -461.551, 50, 0), skin));*/
+				new MapNPC(this, Maps.Mountain, new Location(lw, 34.541, 162, -419.569, 50, 0), skin),
+				new MapNPC(this, Maps.Mansion, new Location(lw, -0.401, 162, -458.504, 50, 0), skin),
+				new MapNPC(this, Maps.TempleOfMars, new Location(lw, 39.505, 162, -417.620, 50, 0), skin));*/
 		addNpcs2(new RandomGameNPC(this, new Location(lw, 10.525, 144, 19.538, 50, 0), skin));
 	}
 

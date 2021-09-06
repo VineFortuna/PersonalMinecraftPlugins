@@ -60,29 +60,20 @@ public class SnowGolemClass extends BaseClass {
 	}
 
 	public ItemStack getTNT() {
-		return ItemHelper.setDetails(new ItemStack(Material.SNOW_BALL, 1), ChatColor.GREEN + "Snowballs",
-				ChatColor.YELLOW + "Right click to throw a deadly Snowballs!");
+		return ItemHelper.setDetails(new ItemStack(Material.SNOW_BALL, 1), ChatColor.GREEN + "Snowballs");
 	}
 
 	@Override
 	public void SetItems(Inventory playerInv) {
-		playerInv.setItem(1,
-				ItemHelper.addEnchant(ItemHelper.addEnchant(
-						ItemHelper.setDetails(new ItemStack(Material.STICK), ChatColor.GREEN + "Map Knocker",
-								ChatColor.GRAY + "Slice your enemies to pieces", ChatColor.YELLOW + ""),
-						Enchantment.KNOCKBACK, 1), Enchantment.DAMAGE_ALL, 2));
+		playerInv
+				.setItem(0,
+						ItemHelper.addEnchant(
+								ItemHelper.addEnchant(ItemHelper.setDetails(new ItemStack(Material.STICK),
+										ChatColor.GREEN + "Map Knocker"), Enchantment.DAMAGE_ALL, 3),
+								Enchantment.KNOCKBACK, 2));
 		ItemStack tnt = getTNT();
 		tnt.setAmount(12);
-		playerInv.setItem(0, tnt);
-
-	}
-
-	private int getNumberOfTNT() {
-		int count = 0;
-		for (ItemStack item : player.getInventory().getContents())
-			if (item != null && item.getType() == Material.SNOW_BALL)
-				count += item.getAmount();
-		return count;
+		playerInv.setItem(1, tnt);
 	}
 
 	@Override
@@ -110,11 +101,11 @@ public class SnowGolemClass extends BaseClass {
 							@Override
 							public void onHit(Player hit) {
 								player.playSound(hit.getLocation(), Sound.SUCCESSFUL_HIT, 1, 1);
-								hit.damage(2.5, player);
+								hit.damage(3.8, player);
 								for (Player gamePlayer : instance.players) {
 									gamePlayer.playSound(hit.getLocation(), Sound.EXPLODE, 1, 1);
-									//gamePlayer.getWorld().createExplosion(hit.getLocation().getX(),
-											//hit.getLocation().getY(), hit.getLocation().getZ(), 3, false, false);
+									// gamePlayer.getWorld().createExplosion(hit.getLocation().getX(),
+									// hit.getLocation().getY(), hit.getLocation().getZ(), 3, false, false);
 									gamePlayer.playEffect(hit.getLocation(), Effect.EXPLOSION_HUGE, 1);
 								}
 
@@ -137,7 +128,6 @@ public class SnowGolemClass extends BaseClass {
 
 	@Override
 	public void SetNameTag() {
-		// TODO Auto-generated method stub
 
 	}
 

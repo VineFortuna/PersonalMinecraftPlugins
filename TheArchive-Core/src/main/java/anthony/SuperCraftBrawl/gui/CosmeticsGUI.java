@@ -59,7 +59,7 @@ public class CosmeticsGUI implements InventoryProvider {
 
 		ItemStack wheat = ItemHelper.setDetails(new ItemStack(Material.WHEAT),
 				"" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.BOLD + "Magic Broom");
-		ItemStack melon = ItemHelper.setDetails(new ItemStack(Material.MELON, data.melon),
+		ItemStack melon = ItemHelper.setDetails(new ItemStack(Material.MELON),
 				"" + ChatColor.RESET + ChatColor.YELLOW + "Melons");
 
 		contents.set(1, 3, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.WHEAT),
@@ -97,22 +97,23 @@ public class CosmeticsGUI implements InventoryProvider {
 		contents.set(2, 4, ClickableItem.of(ItemHelper.setDetails(new ItemStack(Material.LEATHER_CHESTPLATE),
 				"" + ChatColor.RESET + ChatColor.YELLOW + ChatColor.BOLD + "Astronaut Outfit"), e -> {
 					if (data.astronaut == 1) {
-						if (this.isEquipped == false) {
-							this.isEquipped = true;
+						if (!(main.ao.containsKey(player))) {
+							main.ao.put(player, true);
 							player.getInventory().setHelmet(new ItemStack(Material.GLASS));
 							player.getInventory().setChestplate(makeYellow(new ItemStack(Material.LEATHER_CHESTPLATE)));
 							player.getInventory().setLeggings(makeYellow(new ItemStack(Material.LEATHER_LEGGINGS)));
 							player.getInventory().setBoots(makeYellow(new ItemStack(Material.LEATHER_BOOTS)));
 							player.sendMessage("" + ChatColor.BLUE + ChatColor.BOLD + "(!) " + ChatColor.RESET
 									+ "You have equipped " + ChatColor.YELLOW + "Astronaut Outfit");
-						} /*else {
+						} else {
+							main.ao.remove(player);
 							player.getInventory().setHelmet(new ItemStack(Material.AIR));
 							player.getInventory().setChestplate(new ItemStack(Material.AIR));
 							player.getInventory().setLeggings(new ItemStack(Material.AIR));
 							player.getInventory().setBoots(new ItemStack(Material.AIR));
 							player.sendMessage("" + ChatColor.BLUE + ChatColor.BOLD + "(!) " + ChatColor.RESET
 									+ "You have unequipped " + ChatColor.YELLOW + "Astronaut Outfit");
-						}*/
+						}
 					} else {
 						player.sendMessage("" + ChatColor.BLUE + ChatColor.BOLD + "(!) " + ChatColor.RESET
 								+ "You have not unlocked this item yet!");

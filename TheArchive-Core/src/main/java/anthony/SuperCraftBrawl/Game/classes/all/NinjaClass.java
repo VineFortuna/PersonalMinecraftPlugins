@@ -31,7 +31,7 @@ import net.md_5.bungee.api.ChatColor;
  */
 public class NinjaClass extends BaseClass {
 
-	private Cooldown boosterCooldown = new Cooldown(3000), shurikenCooldown = new Cooldown(200);
+	private Cooldown boosterCooldown = new Cooldown(6000), shurikenCooldown = new Cooldown(200);
 
 	public NinjaClass(GameInstance instance, Player player) {
 		super(instance, player);

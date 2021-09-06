@@ -12,6 +12,8 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import anthony.SuperCraftBrawl.ItemHelper;
 import anthony.SuperCraftBrawl.Game.GameInstance;
@@ -50,6 +52,7 @@ public class NotchClass extends BaseClass {
 				Enchantment.DURABILITY, 10000));
 		playerInv.setItem(1, ItemHelper.setDetails(new ItemStack(Material.GRASS),
 				"" + ChatColor.GRAY + "Right Click to Teleport Players"));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 999999999, 0));
 	}
 
 	@Override

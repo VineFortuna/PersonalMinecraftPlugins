@@ -1,6 +1,9 @@
 package anthony.SuperCraftBrawl.Game.classes;
 
+import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import anthony.SuperCraftBrawl.Game.GameInstance;
 import anthony.SuperCraftBrawl.Game.classes.all.BabyCowClass;
@@ -12,7 +15,6 @@ import anthony.SuperCraftBrawl.Game.classes.all.ButterGolemClass;
 import anthony.SuperCraftBrawl.Game.classes.all.Cactus;
 import anthony.SuperCraftBrawl.Game.classes.all.ChickenClass;
 import anthony.SuperCraftBrawl.Game.classes.all.CreeperClass;
-import anthony.SuperCraftBrawl.Game.classes.all.DarkSethBling;
 import anthony.SuperCraftBrawl.Game.classes.all.EnderdragonClass;
 import anthony.SuperCraftBrawl.Game.classes.all.EndermanClass;
 import anthony.SuperCraftBrawl.Game.classes.all.FluxtyClass;
@@ -22,6 +24,7 @@ import anthony.SuperCraftBrawl.Game.classes.all.HorseClass;
 import anthony.SuperCraftBrawl.Game.classes.all.IrongolemClass;
 import anthony.SuperCraftBrawl.Game.classes.all.NinjaClass;
 import anthony.SuperCraftBrawl.Game.classes.all.NotchClass;
+import anthony.SuperCraftBrawl.Game.classes.all.NoteblockClass;
 import anthony.SuperCraftBrawl.Game.classes.all.OcelotClass;
 import anthony.SuperCraftBrawl.Game.classes.all.PigClass;
 import anthony.SuperCraftBrawl.Game.classes.all.PotatoClass;
@@ -45,11 +48,12 @@ public enum ClassType {
 
 	Cactus(1, 0, 0), TNT(2, 350, 0), Enderdragon(3, 0, Rank.Vip), Skeleton(4, 0, 0), Ninja(5, 2500, 0),
 	IronGolem(6, 0, Rank.Vip), Enderman(7, 0, 0), Ghast(8, 0, Rank.Vip), Chicken(9, 500, 0), Slime(10, 0, Rank.Vip),
-	ButterGolem(11, 0, Rank.Vip), DarkSethBling(12, 150, 0), Witch(13, 1000, 0), SnowGolem(14, 800, 0),
+	ButterGolem(11, 0, Rank.Vip)/* , DarkSethBling(12, 150, 0) */, Witch(13, 1000, 0), SnowGolem(14, 800, 0),
 	Bat(15, 0, Rank.Vip), SethBling(16, 0, Rank.Vip), Sheep(17, 550, 0), Horse(18, 0, 0), Melon(19, 0, Rank.Vip),
 	/* Rabbit, */ Squid(20, 0, 0), Spider(21, 0, 0), BabyCow(22, 0, Rank.Vip), Herobrine(23, 0, Rank.Vip),
 	Bunny(24, 450, 0), ButterBro(25, 1200, 0), Snowman(26, 0, 0), Fluxty(27, 0, 0), Steve(28, 1000, 0),
-	Notch(29, 2000, 0), Pig(30, 0, 0), Blaze(31, 0, 0), Potato(32, 750, 0), Wither(33, 0, 0), Ocelot(34, 250, 0), Creeper(35, 0, 0); // FIX NOTCH'S TOKEN COST AFTER
+	Notch(29, 2000, 0), Pig(30, 0, 0), Blaze(31, 0, 0), Potato(32, 750, 0), Wither(33, 0, 0), Ocelot(34, 250, 0),
+	Creeper(35, 0, 0), Noteblock(36, 800, 0); // FIX NOTCH'S TOKEN COST AFTER
 
 	private int id;
 	private int tokenCost = 0;
@@ -99,6 +103,8 @@ public enum ClassType {
 			return new Cactus(instance, player);
 		case Notch:
 			return new NotchClass(instance, player);
+		case Noteblock:
+			return new NoteblockClass(instance, player);
 		case Ocelot:
 			return new OcelotClass(instance, player);
 		case Creeper:
@@ -137,8 +143,8 @@ public enum ClassType {
 			return new SlimeClass(instance, player);
 		case ButterGolem:
 			return new ButterGolemClass(instance, player);
-		case DarkSethBling:
-			return new DarkSethBling(instance, player);
+		// case DarkSethBling:
+		// return new DarkSethBlingClass(instance, player);
 		case Witch:
 			return new WitchClass(instance, player);
 		case SnowGolem:
@@ -172,10 +178,66 @@ public enum ClassType {
 		return null;
 	}
 
+	public ItemStack getItem() {
+		switch (this) {
+		case Cactus:
+			return new ItemStack(Material.CACTUS);
+		case Noteblock: 
+			return new ItemStack(Material.NOTE_BLOCK);
+		case Skeleton:
+			return new ItemStack(Material.SKULL_ITEM);
+		case Enderman:
+			return new ItemStack(Material.ENDER_PEARL);
+		case Horse:
+			return new ItemStack(Material.LEASH);
+		case Squid:
+			return new ItemStack(Material.INK_SACK);
+		case Spider:
+			return new ItemStack(Material.SPIDER_EYE);
+		case Snowman:
+			return new ItemStack(Material.PUMPKIN);
+		case Fluxty:
+			return new ItemStack(Material.LEATHER_CHESTPLATE);
+		case Pig:
+			return new ItemStack(Material.PORK);
+		case Blaze:
+			return new ItemStack(Material.BLAZE_ROD);
+		case Wither:
+			return new ItemStack(Material.NETHER_STAR);
+		case Creeper:
+			ItemStack creeperHelmet = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.CREEPER.ordinal());
+			return new ItemStack(creeperHelmet);
+		case IronGolem:
+			return new ItemStack(new ItemStack(Material.IRON_AXE));
+		case Ghast:
+			return new ItemStack(new ItemStack(Material.GHAST_TEAR));
+		case Slime:
+			return new ItemStack(new ItemStack(Material.SLIME_BALL));
+		case ButterGolem:
+			return new ItemStack(new ItemStack(Material.GOLD_AXE));
+		case Enderdragon:
+			return new ItemStack(new ItemStack(Material.DRAGON_EGG));
+		case Bat:
+			return new ItemStack(new ItemStack(Material.SHEARS));
+		case SethBling:
+			return new ItemStack(new ItemStack(Material.REDSTONE_BLOCK));
+		case Melon:
+			return new ItemStack(new ItemStack(Material.MELON));
+		case BabyCow:
+			return new ItemStack(new ItemStack(Material.RED_MUSHROOM));
+		case Herobrine:
+			return new ItemStack(new ItemStack(Material.DIAMOND));
+		}
+
+		return null;
+	}
+
 	public String getClassDesc() {
 		switch (this) {
 		case Cactus:
 			return "A pricklyyy living thing, made up of thornws & blood..";
+		case Noteblock:
+			return "Play some songs for some awesome effects!";
 		case Ocelot:
 			return "Chase down your opponents with your high speed or Purr Attack!";
 		case Creeper:
@@ -212,8 +274,8 @@ public enum ClassType {
 			return "Blow up your enemies with TNT!";
 		case Chicken:
 			return "Bock bock backaaack! One of the best classes hehe tip";
-		case DarkSethBling:
-			return "The evil counterpart of the redstone King";
+		// case DarkSethBling:
+		// return "The evil counterpart of the redstone King";
 		case Witch:
 			return "She lives in daydreams with me! (She)";
 		case Sheep:
@@ -255,6 +317,8 @@ public enum ClassType {
 			return "" + ChatColor.DARK_GRAY + ChatColor.BOLD + ChatColor.ITALIC + "Bat" + ChatColor.RESET;
 		case Wither:
 			return "" + ChatColor.DARK_GRAY + ChatColor.ITALIC + "Wither" + ChatColor.RESET;
+		case Noteblock:
+			return "" + ChatColor.YELLOW + ChatColor.ITALIC + "Noteblock" + ChatColor.RESET;
 		case Ocelot:
 			return "" + ChatColor.YELLOW + ChatColor.BOLD + "Ocelot" + ChatColor.RESET;
 		case Creeper:
@@ -279,8 +343,9 @@ public enum ClassType {
 			return "" + ChatColor.DARK_GREEN + "Cactus" + ChatColor.RESET;
 		case Chicken:
 			return "" + ChatColor.YELLOW + ChatColor.BOLD + "Chicken" + ChatColor.RESET;
-		case DarkSethBling:
-			return "" + ChatColor.DARK_GRAY + ChatColor.BOLD + ChatColor.ITALIC + "DarkSethBling" + ChatColor.RESET;
+		// case DarkSethBling:
+		// return "" + ChatColor.DARK_GRAY + ChatColor.BOLD + ChatColor.ITALIC +
+		// "DarkSethBling" + ChatColor.RESET;
 		case Enderdragon:
 			return "" + ChatColor.DARK_PURPLE + ChatColor.BOLD + "Ender" + ChatColor.RESET + ChatColor.BLACK
 					+ ChatColor.BOLD + "Dragon" + ChatColor.RESET;

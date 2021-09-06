@@ -36,5 +36,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/antho/Dropbox/My PC (DESKTOP-D1SRB86)/Downloads/craftbukkit-1.8.8-R0.1-SNAPSHOT-latest.jar"/>
 	<classpathentry kind="lib" path="C:/Users/antho/Dropbox/My PC (DESKTOP-D1SRB86)/Downloads/spigot-1.8.8-R0.1-SNAPSHOT-latest (1).jar"/>
+	<classpathentry kind="lib" path="C:/Users/antho/Dropbox/My PC (DESKTOP-D1SRB86)/Downloads/TitleAPI-1.8.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

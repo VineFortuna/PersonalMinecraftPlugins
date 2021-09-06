@@ -127,26 +127,18 @@ public class SethBlingClass extends BaseClass{
 		pot4.setType(PotionType.STRENGTH);
 		pot4.setSplash(true);
 		pot4.apply(item7);
-		
+	
 		ItemStack item3 = new ItemStack(Material.GOLDEN_APPLE, 1);
-		
 		ItemStack item4 = new ItemStack(Material.TNT);
-		
-		ItemStack flintandsteel = new ItemStack(Material.FLINT_AND_STEEL, 1, (short) 64);
-		
 		ItemStack item5 = ItemHelper.addEnchant(ItemHelper.setDetails(new ItemStack(Material.IRON_SWORD, 1, (short) 250), "" + ChatColor.YELLOW + ChatColor.BOLD + "HAMMER",
 				ChatColor.YELLOW + ""), Enchantment.KNOCKBACK, 10);
 		item5.getDurability();
-		
 		ItemStack[] itemList = {item, item2, item3, item, item2, item3, item6, item7, item, item, item2};
 		Random rand = new Random();
 		int randomNum = rand.nextInt(itemList.length);
-		
 		ItemStack[] itemList2 = {item4, item5, item, item2, item3, item4, item5, item, item2, item3, item6};
 		Random rand2 = new Random();
 		int randomNum2 = rand2.nextInt(itemList2.length);
-		
-		
 		player.getInventory().addItem(new ItemStack(itemList[randomNum]));
 		player.getInventory().addItem(new ItemStack(itemList2[randomNum2]));
 	}
